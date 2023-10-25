@@ -1,3 +1,9 @@
 /processed_dirs.pkl
 /processed_files.csv
 .idea/*
+/conda_activate_run_jupyter.bat
+/Untitled.ipynb
+/duplicates.xlsx
+/files_to_delete.txt
+/~$duplicates.xlsx
+/.ipynb_checkpoints/

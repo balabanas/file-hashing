@@ -79,6 +79,9 @@ def main():
     args.path = os.path.normpath(args.path)
     args.savedirs = os.path.normpath(args.savedirs)
     args.savehashes = os.path.normpath(args.savehashes)
+    if not os.path.isdir(args.path):
+        print("Path not exists")
+        exit(1)
     unprocessed_dirs = {key: value for key, value in update_dirs(args).items() if not value}
     walk_files(unprocessed_dirs, args)
 
@@ -87,6 +90,7 @@ def update_dirs(args: argparse.Namespace) -> dict:
     try:
         with open(args.savedirs, 'rb') as inp:
             processed_dirs: dict = pickle.load(inp)
+            # how to deal with paths which not exist no more
     except FileNotFoundError:
         processed_dirs: dict = {args.path: False}
         with open(args.savehashes, 'w', encoding='utf-8') as processed_files_csv:
@@ -94,8 +98,11 @@ def update_dirs(args: argparse.Namespace) -> dict:
     print(args.path)
     if args.path not in processed_dirs:
         processed_dirs[args.path] = False
-    for root, dirs, _ in os.walk(args.path, topdown=False):
+    for root, dirs, _ in os.walk(args.path, topdown=True):
+        if '.git' in dirs:
+            dirs.remove('.git')  # don't want into .git directories
         for name in dirs:
+
             current_dir = os.path.join(root, name)
             if current_dir not in processed_dirs:
                 processed_dirs[current_dir] = False

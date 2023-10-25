@@ -1,0 +1,1 @@
+Get-Content files_to_delete.txt | ForEach-Object {Remove-Item $_}
